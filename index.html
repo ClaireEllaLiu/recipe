@@ -9,7 +9,7 @@
 <body>
   <header class="app-header">
     <h1>🍳 今天煮什麼？</h1>
-    <p class="subtitle">輸入想吃的菜名，馬上看食材和做法</p>
+    <p class="subtitle">點一道菜，或輸入菜名搜尋，馬上看食材和做法</p>
   </header>
 
   <main class="app-main">
@@ -18,13 +18,17 @@
         <input
           id="search-input"
           type="text"
-          placeholder="輸入菜名，例如：番茄炒蛋"
+          placeholder="輸入菜名搜尋，例如：番茄炒蛋"
           autocomplete="off"
         />
         <button id="search-btn" aria-label="搜尋">搜尋</button>
       </div>
       <ul id="suggestions" class="suggestions hidden"></ul>
-      <div id="quick-list" class="quick-list"></div>
+    </section>
+
+    <section id="recipe-browser" class="recipe-browser">
+      <h2 class="browser-heading">全部食譜</h2>
+      <div id="recipe-grid" class="recipe-grid"></div>
     </section>
 
     <section id="result" class="result hidden">
@@ -37,16 +41,13 @@
         <button id="back-btn" class="back-btn">← 換一道菜</button>
       </div>
 
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="ingredients">食材</button>
-        <button class="tab-btn" data-tab="steps">步驟</button>
-      </div>
-
-      <div id="tab-ingredients" class="tab-panel active">
+      <div class="section-block">
+        <h3 class="block-heading">食材</h3>
         <ul id="ingredient-list" class="ingredient-list"></ul>
       </div>
 
-      <div id="tab-steps" class="tab-panel">
+      <div class="section-block">
+        <h3 class="block-heading">步驟</h3>
         <div class="step-nav">
           <div class="step-progress">
             <div id="step-progress-bar" class="step-progress-bar"></div>

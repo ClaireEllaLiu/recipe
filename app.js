@@ -2,7 +2,8 @@
   const searchInput = document.getElementById("search-input");
   const searchBtn = document.getElementById("search-btn");
   const suggestionsEl = document.getElementById("suggestions");
-  const quickListEl = document.getElementById("quick-list");
+  const recipeBrowserEl = document.getElementById("recipe-browser");
+  const recipeGridEl = document.getElementById("recipe-grid");
   const resultEl = document.getElementById("result");
   const notFoundEl = document.getElementById("not-found");
   const backBtn = document.getElementById("back-btn");
@@ -17,8 +18,6 @@
   const stepProgressBarEl = document.getElementById("step-progress-bar");
   const prevStepBtn = document.getElementById("prev-step");
   const nextStepBtn = document.getElementById("next-step");
-  const tabBtns = document.querySelectorAll(".tab-btn");
-  const tabPanels = document.querySelectorAll(".tab-panel");
 
   let currentRecipe = null;
   let currentStepIndex = 0;
@@ -47,18 +46,27 @@
       .map((x) => x.recipe);
   }
 
-  function renderQuickList() {
-    quickListEl.innerHTML = "";
-    const picks = RECIPES.slice(0, 8);
-    picks.forEach((r) => {
-      const chip = document.createElement("button");
-      chip.className = "quick-chip";
-      chip.textContent = r.name;
-      chip.addEventListener("click", () => {
+  function renderRecipeGrid() {
+    recipeGridEl.innerHTML = "";
+    RECIPES.forEach((r) => {
+      const card = document.createElement("button");
+      card.className = "recipe-card";
+
+      const name = document.createElement("span");
+      name.className = "card-name";
+      name.textContent = r.name;
+
+      const meta = document.createElement("span");
+      meta.className = "card-meta";
+      meta.textContent = `⏱ ${r.time} ・ 🍽 ${r.servings}`;
+
+      card.appendChild(name);
+      card.appendChild(meta);
+      card.addEventListener("click", () => {
         searchInput.value = r.name;
         showRecipe(r);
       });
-      quickListEl.appendChild(chip);
+      recipeGridEl.appendChild(card);
     });
   }
 
@@ -87,6 +95,7 @@
     currentStepIndex = 0;
 
     notFoundEl.classList.add("hidden");
+    recipeBrowserEl.classList.add("hidden");
     resultEl.classList.remove("hidden");
     suggestionsEl.classList.add("hidden");
 
@@ -120,7 +129,6 @@
     });
 
     renderSteps();
-    switchTab("ingredients");
   }
 
   function renderSteps() {
@@ -144,17 +152,9 @@
     nextStepBtn.disabled = currentStepIndex === steps.length - 1;
   }
 
-  function switchTab(tabName) {
-    tabBtns.forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.tab === tabName);
-    });
-    tabPanels.forEach((panel) => {
-      panel.classList.toggle("active", panel.id === "tab-" + tabName);
-    });
-  }
-
   function showNotFound() {
     resultEl.classList.add("hidden");
+    recipeBrowserEl.classList.remove("hidden");
     notFoundEl.classList.remove("hidden");
     suggestionsEl.classList.add("hidden");
   }
@@ -195,12 +195,9 @@
   backBtn.addEventListener("click", () => {
     resultEl.classList.add("hidden");
     notFoundEl.classList.add("hidden");
+    recipeBrowserEl.classList.remove("hidden");
     searchInput.value = "";
     searchInput.focus();
-  });
-
-  tabBtns.forEach((btn) => {
-    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
   });
 
   prevStepBtn.addEventListener("click", () => {
@@ -217,5 +214,5 @@
     }
   });
 
-  renderQuickList();
+  renderRecipeGrid();
 })();
