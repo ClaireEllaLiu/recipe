@@ -3,7 +3,9 @@
   const searchBtn = document.getElementById("search-btn");
   const suggestionsEl = document.getElementById("suggestions");
   const recipeBrowserEl = document.getElementById("recipe-browser");
+  const browserHeadingEl = document.getElementById("browser-heading");
   const recipeGridEl = document.getElementById("recipe-grid");
+  const toggleAllBtn = document.getElementById("toggle-all");
   const resultEl = document.getElementById("result");
   const notFoundEl = document.getElementById("not-found");
   const backBtn = document.getElementById("back-btn");
@@ -19,8 +21,11 @@
   const prevStepBtn = document.getElementById("prev-step");
   const nextStepBtn = document.getElementById("next-step");
 
+  const HOME_PICK_COUNT = 5;
+
   let currentRecipe = null;
   let currentStepIndex = 0;
+  let showingAllRecipes = false;
 
   function normalize(str) {
     return str.trim().toLowerCase();
@@ -47,8 +52,18 @@
   }
 
   function renderRecipeGrid() {
+    const shown = showingAllRecipes
+      ? RECIPES
+      : RECIPES.slice(0, HOME_PICK_COUNT);
+
+    browserHeadingEl.textContent = showingAllRecipes ? "全部食譜" : "推薦菜色";
+    toggleAllBtn.textContent = showingAllRecipes
+      ? "收起來"
+      : `看全部 ${RECIPES.length} 道 →`;
+    toggleAllBtn.classList.toggle("hidden", RECIPES.length <= HOME_PICK_COUNT);
+
     recipeGridEl.innerHTML = "";
-    RECIPES.forEach((r) => {
+    shown.forEach((r) => {
       const card = document.createElement("button");
       card.className = "recipe-card";
 
@@ -191,6 +206,11 @@
   });
 
   searchBtn.addEventListener("click", handleSearch);
+
+  toggleAllBtn.addEventListener("click", () => {
+    showingAllRecipes = !showingAllRecipes;
+    renderRecipeGrid();
+  });
 
   backBtn.addEventListener("click", () => {
     resultEl.classList.add("hidden");

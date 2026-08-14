@@ -160,6 +160,22 @@ body {
   color: var(--text-muted);
 }
 
+.toggle-all {
+  display: block;
+  margin: 14px auto 0;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.toggle-all:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 420px) {
   .recipe-grid {
     grid-template-columns: 1fr;
