@@ -8,6 +8,12 @@
   const toggleAllBtn = document.getElementById("toggle-all");
   const resultEl = document.getElementById("result");
   const notFoundEl = document.getElementById("not-found");
+  const notFoundMsgEl = document.getElementById("not-found-msg");
+  const notFoundHintEl = document.getElementById("not-found-hint");
+  const lookupEl = document.getElementById("looking-up");
+  const lookupNameEl = document.getElementById("lookup-name");
+  const sourcesBlockEl = document.getElementById("sources-block");
+  const sourceListEl = document.getElementById("source-list");
   const backBtn = document.getElementById("back-btn");
 
   const recipeNameEl = document.getElementById("recipe-name");
@@ -111,6 +117,7 @@
 
     notFoundEl.classList.add("hidden");
     recipeBrowserEl.classList.add("hidden");
+    lookupEl.classList.add("hidden");
     resultEl.classList.remove("hidden");
     suggestionsEl.classList.add("hidden");
 
@@ -143,7 +150,24 @@
       ingredientListEl.appendChild(li);
     });
 
+    renderSources(recipe.sources);
     renderSteps();
+  }
+
+  function renderSources(sources) {
+    sourceListEl.innerHTML = "";
+    const list = Array.isArray(sources) ? sources.filter(Boolean) : [];
+    sourcesBlockEl.classList.toggle("hidden", list.length === 0);
+    list.forEach((url) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = url;
+      a.textContent = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      li.appendChild(a);
+      sourceListEl.appendChild(li);
+    });
   }
 
   function renderSteps() {
@@ -167,21 +191,65 @@
     nextStepBtn.disabled = currentStepIndex === steps.length - 1;
   }
 
-  function showNotFound() {
+  function showNotFound(message, hint) {
     resultEl.classList.add("hidden");
     recipeBrowserEl.classList.remove("hidden");
     notFoundEl.classList.remove("hidden");
     suggestionsEl.classList.add("hidden");
+    notFoundMsgEl.textContent = message || "這道菜正在補充中，很快就會加進來 🍳";
+    notFoundHintEl.textContent =
+      hint || "先看看下面其他菜色，或告訴我們你想吃什麼";
+  }
+
+  function showLookingUp(name) {
+    resultEl.classList.add("hidden");
+    notFoundEl.classList.add("hidden");
+    recipeBrowserEl.classList.add("hidden");
+    suggestionsEl.classList.add("hidden");
+    lookupNameEl.textContent = name;
+    lookupEl.classList.remove("hidden");
+  }
+
+  function hideLookingUp() {
+    lookupEl.classList.add("hidden");
+  }
+
+  // 資料庫裡沒有的菜，交給後端上網查（沒有後端時安靜地退回「補充中」訊息）
+  async function lookUpOnline(name) {
+    showLookingUp(name);
+    try {
+      const res = await fetch(
+        "/api/recipe?name=" + encodeURIComponent(name)
+      );
+      const data = await res.json();
+      hideLookingUp();
+
+      if (data.status === "found" && data.recipe) {
+        RECIPES.push(data.recipe);
+        renderRecipeGrid();
+        showRecipe(data.recipe);
+        return;
+      }
+      if (data.status === "not_a_dish") {
+        showNotFound(data.message, "請確認菜名是否正確，或換一道菜試試");
+        return;
+      }
+      showNotFound();
+    } catch {
+      // 純靜態部署（沒有後端）會走到這裡
+      hideLookingUp();
+      showNotFound();
+    }
   }
 
   function handleSearch() {
-    const query = searchInput.value;
-    if (!query.trim()) return;
+    const query = searchInput.value.trim();
+    if (!query) return;
     const matches = searchRecipes(query);
     if (matches.length > 0) {
       showRecipe(matches[0]);
     } else {
-      showNotFound();
+      lookUpOnline(query);
     }
   }
 

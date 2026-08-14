@@ -1,0 +1,12 @@
+{
+  "name": "recipe-helper",
+  "version": "1.0.0",
+  "description": "輸入菜名就顯示食材與逐步做法的食譜網頁",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.117.1"
+  }
+}

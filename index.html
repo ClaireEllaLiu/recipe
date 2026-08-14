@@ -62,11 +62,22 @@
         </div>
         <ol id="all-steps" class="all-steps"></ol>
       </div>
+
+      <div id="sources-block" class="section-block hidden">
+        <h3 class="block-heading">參考來源</h3>
+        <ul id="source-list" class="source-list"></ul>
+      </div>
+    </section>
+
+    <section id="looking-up" class="looking-up hidden">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>正在為你查「<span id="lookup-name"></span>」的做法…</p>
+      <p class="hint">第一次查詢需要一點時間，查好後就會存起來</p>
     </section>
 
     <section id="not-found" class="not-found hidden">
-      <p>這道菜正在補充中，很快就會加進來 🍳</p>
-      <p class="hint">先看看下面其他菜色，或告訴我們你想吃什麼</p>
+      <p id="not-found-msg">這道菜正在補充中，很快就會加進來 🍳</p>
+      <p id="not-found-hint" class="hint">先看看下面其他菜色，或告訴我們你想吃什麼</p>
     </section>
   </main>
 
