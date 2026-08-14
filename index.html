@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>今天煮什麼｜食譜小幫手</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>🍳 今天煮什麼？</h1>
+    <p class="subtitle">輸入想吃的菜名，馬上看食材和做法</p>
+  </header>
+
+  <main class="app-main">
+    <section class="search-section">
+      <div class="search-box">
+        <input
+          id="search-input"
+          type="text"
+          placeholder="輸入菜名，例如：番茄炒蛋"
+          autocomplete="off"
+        />
+        <button id="search-btn" aria-label="搜尋">搜尋</button>
+      </div>
+      <ul id="suggestions" class="suggestions hidden"></ul>
+      <div id="quick-list" class="quick-list"></div>
+    </section>
+
+    <section id="result" class="result hidden">
+      <div class="result-header">
+        <h2 id="recipe-name"></h2>
+        <div class="meta">
+          <span id="recipe-time"></span>
+          <span id="recipe-servings"></span>
+        </div>
+        <button id="back-btn" class="back-btn">← 換一道菜</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="ingredients">食材</button>
+        <button class="tab-btn" data-tab="steps">步驟</button>
+      </div>
+
+      <div id="tab-ingredients" class="tab-panel active">
+        <ul id="ingredient-list" class="ingredient-list"></ul>
+      </div>
+
+      <div id="tab-steps" class="tab-panel">
+        <div class="step-nav">
+          <div class="step-progress">
+            <div id="step-progress-bar" class="step-progress-bar"></div>
+          </div>
+          <div id="step-counter" class="step-counter"></div>
+        </div>
+        <div id="current-step" class="current-step"></div>
+        <div class="step-controls">
+          <button id="prev-step" class="step-btn">上一步</button>
+          <button id="next-step" class="step-btn primary">下一步</button>
+        </div>
+        <ol id="all-steps" class="all-steps"></ol>
+      </div>
+    </section>
+
+    <section id="not-found" class="not-found hidden">
+      <p>😅 目前還沒有這道菜的食譜</p>
+      <p class="hint">試試看：番茄炒蛋、麻婆豆腐、紅燒肉、蛋炒飯…</p>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>一步一步照著做，輕鬆上菜 👩‍🍳</p>
+  </footer>
+
+  <script src="data/recipes.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
